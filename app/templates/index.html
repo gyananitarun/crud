@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple To-Do List</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            margin-bottom: 10px;
+            resize: vertical;
+            box-sizing: border-box; 
+        }
+        button {
+            width: 100%;
+            padding: 10px 15px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            background: #f9f9f9;
+            border-bottom: 1px solid #eee;
+        }
+        li:last-child {
+            border-bottom: none;
+        }
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .task-title {
+            font-weight: bold;
+        }
+        .task-description {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+            padding-left: 5px;
+            border-left: 2px solid #ddd;
+        }
+        .completed .task-title {
+            text-decoration: line-through;
+            color: #888;
+        }
+        .task-actions a {
+            text-decoration: none;
+            margin-left: 10px;
+            color: #dc3545;
+        }
+        .task-actions a.update {
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>My To-Do List</h1>
+
+        <form action="{% url 'index' %}" method="POST">
+            {% csrf_token %}
+            <input type="text" name="title" placeholder="Add a new task title..." required>
+            <textarea name="description" placeholder="Add a description (optional)..." rows="3"></textarea>
+            <button type="submit">Add Task</button>
+        </form>
+
+        <ul>
+            {% for task in tasks %}
+            <li class="{% if task.completed %}completed{% endif %}">
+                <div class="task-header">
+                    <span class="task-title">
+                        {{ task.title }}
+                    </span>
+                    <div class="task-actions">
+                        <a href="{% url 'update_task' task.id %}" class="update">
+                            {% if task.completed %}Undo{% else %}Done{% endif %}
+                        </a>
+                        <a href="{% url 'delete_task' task.id %}">Delete</a>
+                    </div>
+                </div>
+                {% if task.description %}
+                    <p class="task-description">{{ task.description }}</p>
+                {% endif %}
+            </li>
+            {% empty %}
+            <li>No tasks yet.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</body>
+</html>
