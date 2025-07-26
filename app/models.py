@@ -10,3 +10,12 @@ class Task(models.Model):
 
     class Meta:
         ordering = ['-id']
+
+class Location(models.Model):
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    address = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.address} @ {self.timestamp}"

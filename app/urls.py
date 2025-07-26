@@ -5,4 +5,5 @@ urlpatterns = [
     path('', views.index, name='index'), 
     path('update/<int:pk>/', views.update_task, name='update_task'), 
     path('delete/<int:pk>/', views.delete_task, name='delete_task'),
+    path('save-location/', views.save_location, name='save-location'),
 ]
